@@ -1,73 +1,64 @@
-/*********************************************************************************************
-   Contrôle de deux moteurs cc avec un L298N
-   http://electroniqueamateur.blogspot.com/2016/06/controle-dun-ou-deux-moteurs-cc-avec.html
- *********************************************************************************************/
-
-// définition des pins de l'Arduino qui contrôlent le 1er moteur
+#define BLYNK_PRINT Serial
+#define BLYNK_TEMPLATE_ID "0"
+#define BLYNK_TEMPLATE_NAME "New Device"
 
 #include <Arduino.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
 
-/*********************************************************************************************
-   Contrôle de deux moteurs cc avec un L298N
-   http://electroniqueamateur.blogspot.com/2016/06/controle-dun-ou-deux-moteurs-cc-avec.html
- *********************************************************************************************/
+// Authentification Blynk
+const char* auth = "dR6UwI9yK1iE1aai5rxjtN-dsLsNqB7u";
+// WiFi credentials
+const char* ssid = "BTS_CIEL";
+const char* password = "ERIR1234";
 
-// définition des pins de l'Arduino qui contrôlent le 1er moteur
-#define pinIN1 4
-#define pinIN2 3
-#define pinENA 1 // doit être une pin PWM 
+// Pins de contrôle
+const int pins[] = {4, 3, 21, 16, 2, 15};
 
-// définition des pins de l'Arduino qui contrôlent le 2e moteur
-#define pinIN3 16
-#define pinIN4 2
-#define pinENB 15 // doit être une pin PWM 
-
-
+// Initialisation
 void setup() {
+  Serial.begin(9600);
 
-  // toutes ces pins sont des sorties
+  // Configurer les pins en sortie
+  for (int i = 0; i < 6; i++) {
+    pinMode(pins[i], OUTPUT);
+    digitalWrite(pins[i], LOW); // Assurez-vous que toutes les broches sont à l'arrêt au début
+  }
 
-  pinMode(pinIN1, OUTPUT);
-  pinMode(pinIN2, OUTPUT);
-  pinMode(pinENA, OUTPUT);
+  // Connexion WiFi
+  Serial.println("\nConnexion au WiFi...");
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+  Serial.println("\nConnexion établie!");
+  Serial.print("Adresse IP: ");
+  Serial.println(WiFi.localIP());
 
-  pinMode(pinIN3, OUTPUT);
-  pinMode(pinIN4, OUTPUT);
-  pinMode(pinENB, OUTPUT);
+  // Initialisation de Blynk
+  Blynk.begin(auth, ssid, password);
+}
 
+// Fonction appelée par Blynk pour le bouton sur V1
+BLYNK_WRITE(V1) {
+  int pinValue = param.asInt(); // Lire la valeur du bouton (0 ou 1)
+  if (pinValue == 1) {
+    Serial.println("Activer les moteurs !");
+    // Activer les broches
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(pins[i], HIGH);
+    }
+  } else {
+    Serial.println("Arrêter les moteurs !");
+    // Désactiver les broches
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(pins[i], LOW);
+    }
+  }
 }
 
 void loop() {
-
-  // le premier moteur tourne en marche avant, lentement
-
-  analogWrite(pinENA, 20); // vitesse lente (entre 0 et 255)
-  // si le moteur ne tourne pas du tout, augmentez la valeur
-  digitalWrite(pinIN1, true);
-  digitalWrite(pinIN2, false);
-
-  // le deuxième moteur en marche arrière, rapidement
-
-  analogWrite(pinENB, 200); // vitesse assez rapide
-  digitalWrite(pinIN3, false);
-  digitalWrite(pinIN4, true);
-
-  // on les laisse tourner comme ça pendant 2 secondes
-
-  delay(2000);
-
-  // le premier moteur tourne en marche arrière, rapidement
-
-  analogWrite(pinENA, 255); // vitesse maximale
-  digitalWrite(pinIN1, false); // le contraire de ce qu'on avait en marche avant
-  digitalWrite(pinIN2, true);
-
-  analogWrite(pinENB, 40); // vitesse assez lente: augmentez le nombre si votre moteur ne tourne pas du tout
-  digitalWrite(pinIN3, true); // le contraire de ce qu'on avait en marche arrière
-  digitalWrite(pinIN4, false);
-
-  // on les laisse tourner comme ça pendant 2 secondes
-
-  delay(2000);
-
+  Blynk.run(); // Exécuter les tâches Blynk
 }
