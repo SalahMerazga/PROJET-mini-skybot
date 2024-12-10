@@ -38,7 +38,7 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Initialisation de Blynk
-  Blynk.begin(auth, ssid, password, IPAddress(169,168,1,44), 8080);
+  Blynk.begin(auth, ssid, password, IPAddress(192,168,1,44), 8080);
 }
 
 // Fonction appelée par Blynk pour le bouton sur V1
