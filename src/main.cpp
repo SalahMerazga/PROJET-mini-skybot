@@ -1,4 +1,4 @@
-#include <Arduino.h> //EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE
+#include <Arduino.h>  //EASY PEASY LEMON SQUEEZIE
 
 #define BLYNK_PRINT Serial
 
@@ -19,9 +19,9 @@ const char* password = "ERIR1234";
  *********************************************************************************************/
 
 // définition des pins de l'Arduino qui contrôlent le 1er moteur
-#define pinIN1 16
-#define pinIN2 17
-#define pinENA 18 // doit être une pin PWM 
+#define pinIN1 17
+#define pinIN2 18
+#define pinENA 16 // doit être une pin PWM 
 
 // définition des pins de l'Arduino qui contrôlent le 2e moteur
 #define pinIN3 19
@@ -91,7 +91,7 @@ BLYNK_WRITE(V1) { // Associe le bouton Blynk au pin virtuel V1
     
   }
 }
-  BLYNK_WRITE(V2) { // Associe le bouton Blynk au pin virtuel V1
+  BLYNK_WRITE(V2) { // Associe le bouton Blynk au pin virtuel V2
   int pinValue = param.asInt(); // Valeur du bouton (0 ou 1)
   
   if (pinValue == 1) {  // Si le bouton est pressé
