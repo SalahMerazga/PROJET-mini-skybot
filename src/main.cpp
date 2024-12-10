@@ -1,4 +1,4 @@
-#include <Arduino.h>
+#include <Arduino.h> //EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE EASY PEASY LEMON SQUEEZIE
 
 #define BLYNK_PRINT Serial
 
@@ -79,15 +79,6 @@ BLYNK_WRITE(V1) { // Associe le bouton Blynk au pin virtuel V1
     digitalWrite(pinIN2, LOW);   // IN2
     digitalWrite(pinIN3, HIGH);  // IN3
     digitalWrite(pinIN4, LOW);   // IN4
-
-    analogWrite(pinENA, motorSpeed); // ENA (vitesse du moteur 1)
-    analogWrite(pinENB, motorSpeed); // ENB (vitesse du moteur 2)
-
-    digitalWrite(pinIN1, LOW);  // IN1
-    digitalWrite(pinIN2, HIGH);   // IN2
-    digitalWrite(pinIN3, LOW);  // IN3
-    digitalWrite(pinIN4, HIGH);   // IN4
-
     analogWrite(pinENA, motorSpeed); // ENA (vitesse du moteur 1)
     analogWrite(pinENB, motorSpeed); // ENB (vitesse du moteur 2)
   } else {
@@ -96,5 +87,28 @@ BLYNK_WRITE(V1) { // Associe le bouton Blynk au pin virtuel V1
     digitalWrite(pinIN2, LOW);  // IN2
     digitalWrite(pinIN3, LOW);  // IN3
     digitalWrite(pinIN4, LOW);  // IN4
+
+    
+  }
+}
+  BLYNK_WRITE(V2) { // Associe le bouton Blynk au pin virtuel V1
+  int pinValue = param.asInt(); // Valeur du bouton (0 ou 1)
+  
+  if (pinValue == 1) {  // Si le bouton est pressé
+    // Avancer le robot EN
+    digitalWrite(pinIN1, LOW);  // IN1
+    digitalWrite(pinIN2, HIGH);   // IN2
+    digitalWrite(pinIN3, LOW);  // IN3
+    digitalWrite(pinIN4, HIGH);   // IN4
+    analogWrite(pinENA, motorSpeed); // ENA (vitesse du moteur 1)
+    analogWrite(pinENB, motorSpeed); // ENB (vitesse du moteur 2)
+  } else {
+    // Arrêter les moteurs
+    digitalWrite(pinIN1, LOW);  // IN1
+    digitalWrite(pinIN2, LOW);  // IN2
+    digitalWrite(pinIN3, LOW);  // IN3
+    digitalWrite(pinIN4, LOW);  // IN4
+
+    
   }
 }
