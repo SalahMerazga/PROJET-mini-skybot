@@ -14,7 +14,7 @@ const char* ssid = "BTS_CIEL";
 const char* password = "ERIR1234";
 
 // Pins de contrôle
-const int pins[] = {4, 3, 21, 16, 2, 15};
+const int pins[] = {16, 17, 18, 19, 21, 22};
 
 // Initialisation
 void setup() {
