@@ -1,6 +1,6 @@
 #define BLYNK_PRINT Serial
 #define BLYNK_TEMPLATE_ID "0"
-#define BLYNK_TEMPLATE_NAME "New Device"
+#define BLYNK_TEMPLATE_NAME "Blynk LED"
 
 #include <Arduino.h>
 #include <WiFi.h>
@@ -38,7 +38,7 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Initialisation de Blynk
-  Blynk.begin(auth, ssid, password);
+  Blynk.begin(auth, ssid, password, IPAddress(169,168,1,44), 8080);
 }
 
 // Fonction appelée par Blynk pour le bouton sur V1
